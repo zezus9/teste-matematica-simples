@@ -10,18 +10,18 @@
     <title>Teste</title>
 </head>
 <body class="bg-dark d-flex justify-content-center align-items-center h-100">
-    <main class="d-flex justify-content-center align-items-around flex-column h-50 w-50 border border-white">
+    <main id="main" class="d-flex justify-content-center align-items-around flex-column h-50 w-50 border border-white">
         <div class="d-flex justify-content-between m-2">
             <span class="h2 p-4 pb-0 pt-0">
                 <a href="index.html"><i class="bi bi-arrow-left text-white"></i></a>
             </span>
             <h2 id="timer" class="p-4 pb-0 pt-0 text-white"></h2>
         </div>
-        <form class="d-flex justify-content-center align-items-center m-2 flex-column h-75">
-            <h2 class="text-white mb-5" id="questaoNumber">Começar</h2>
-            <h4 class="text-white" id="calculo"></h4>
-            <input type="number" id="resp" class="m-3 bg-dark text-white border border-white rounded text-center" hidden>
-            <button id="pronto" class="text-black btn btn-outline-secondary bg-white m-2 btn-hover">Pronto</button>
+        <form id="print" class="d-flex justify-content-center align-items-center m-2 flex-column h-75">
+            <h2 class="bg-white p-1 remove" id="questaoNumber">Começar</h2>
+            <h4 class="text-white remove" id="calculo"></h4>
+            <input type="number" id="resp" class="m-3 bg-dark text-white border border-white rounded text-center remove" hidden>
+            <button id="pronto" class="text-black btn btn-outline-secondary bg-white m-2 btn-hover remove">Pronto</button>
         </form>
     </main>
 </body>

@@ -2,26 +2,10 @@ let questao = 0
 let value1
 let value2
 let questoes = Array()
-// let timer = 0
-
-// function timerInicio() {
-//     setInterval(function() {
-//         timer++
-    
-//         document.querySelector('#timer').innerHTML = timer
-//         if (document.querySelector('#pronto').hasAttribute('hidden')) {
-//         }
-//         let tela = new Date().
-//         console.log()
-//     }, 1000);
-// }
 
 document.querySelector('#pronto').addEventListener('click',function(e) {
 
     e.preventDefault()
-    // if (questao == 0) {
-    //     timerInicio()
-    // }
 
     if (questao < 20) {
 
@@ -62,16 +46,66 @@ document.querySelector('#pronto').addEventListener('click',function(e) {
         document.querySelector('#resp').value = ''
     } else {
 
-        questoes[19].resp = document.querySelector('#resp').value
-        let acertos = 0
+        if (questao > 20) {
+            
+            printResult(questoes)
+        } else {
 
-        for (let i = 0; i < questoes.length; i++) {
-            acertos += questoes[i].resp == questoes[i].valor1 + questoes[i].valor2 ? 1 : 0
+            questao += 1
+            let acertos = 0
+            questoes[questoes.length - 1].resp = document.querySelector('#resp').value
+    
+            for (let i = 0; i < questoes.length; i++) {
+                acertos += questoes[i].resp == questoes[i].valor1 + questoes[i].valor2 ? 1 : 0
+            }
+            
+            document.querySelector('#resp').setAttribute('hidden','true')
+            document.querySelector('#pronto').innerHTML = 'Mostrar respostas'
+            document.querySelector('#questaoNumber').innerHTML = `Resultado`
+            document.querySelector('#calculo').innerHTML = `Você acertou ${acertos}/${questoes.length}`
         }
-        console.log(questoes)
-        document.querySelector('#resp').setAttribute('hidden','true')
-        document.querySelector('#pronto').setAttribute('hidden','true')
-        document.querySelector('#questaoNumber').innerHTML = `Resultado`
-        document.querySelector('#calculo').innerHTML = `Você acertou ${acertos}/20`
+
     }
 })
+
+function printResult(questoes) {
+
+    document.querySelector('#print').innerHTML = ''
+    document.querySelector('#print').classList.remove('d-flex')
+    document.querySelector('#main').classList.remove('border','d-flex')
+    document.querySelector('body').classList.remove('align-items-center')
+
+    for (let i = 0; i < questoes.length; i++) {
+        
+        let div = document.createElement("div")
+        let div2 = document.createElement("div")
+        let questao = document.createElement('h3')
+        let calculo = document.createElement('h5')
+        let resultado = document.createElement('h5')
+    
+        div.classList.add('m-5','border','border-white','p-5')
+        div2.classList.add('d-flex','justify-content-around','align-items-center')
+        questao.classList.add('bg-white','m-3','text-center')
+        calculo.classList.add('text-white','m-3','p-2')
+        resultado.classList.add('text-white','m-3','p-2')
+
+        if (questoes[i].valor1 + questoes[i].valor2 == questoes[i].resp) {
+            calculo.classList.add('bg-success')
+            resultado.classList.add('bg-success')
+        } else {
+            calculo.classList.add('bg-danger')
+            resultado.classList.add('bg-danger')
+        }
+
+        questao.innerHTML = `Questão ${questoes[i].questaoNumber}`
+        calculo.innerHTML = `${questoes[i].valor1} + ${questoes[i].valor2} = ${questoes[i].valor1 + questoes[i].valor2}`
+        resultado.innerHTML = `Resposta = ${questoes[i].resp}`
+
+        document.querySelector('#print').appendChild(div)
+        div.appendChild(questao)
+        div.appendChild(div2)
+        div2.appendChild(calculo)
+        div2.appendChild(resultado)
+    }
+
+}
