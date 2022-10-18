@@ -1,12 +1,14 @@
-var urlAtual = window.location.href;
-var urlClass = new URL(urlAtual);
-var mode = urlClass.searchParams.get("mode");
+var urlAtual = window.location.href
+var urlClass = new URL(urlAtual)
+var mode = urlClass.searchParams.get("mode")
 
 document.querySelector('#calculo').innerHTML = mode == 'endless' ? 'Modo Infinito' : 'Jogo rápido'
 
 let questao = 0
 let value1
 let value2
+let sinal
+let sinalmath
 let questoes = Array()
 
 if (mode != 'endless') {
@@ -29,14 +31,19 @@ if (mode != 'endless') {
     
                 value2 = Math.random() * 100
             }
+            
+            sinal = Math.random() * 100
+            if (sinal < 33) { sinal = 'x' } else if (sinal < 66) { sinal = 'x' } else { sinal = '+' }
+
             document.querySelector('#resp').removeAttribute('hidden')
             document.querySelector('#questaoNumber').innerHTML = `Questão ${questao}`
-            document.querySelector('#calculo').innerHTML = `${Math.round(value1)} + ${Math.round(value2)}`
+            document.querySelector('#calculo').innerHTML = `${Math.round(value1)} ${sinal} ${Math.round(value2)}`
         
             let result = {
     
                 questaoNumber: questao,
                 resp: document.querySelector('#resp').value,
+                sinal: sinal,
                 valor1: Math.round(value1),
                 valor2: Math.round(value2)
             }
@@ -62,14 +69,19 @@ if (mode != 'endless') {
                 questoes[questoes.length - 1].resp = document.querySelector('#resp').value
         
                 for (let i = 0; i < questoes.length; i++) {
-                    acertos += questoes[i].resp == questoes[i].valor1 + questoes[i].valor2 ? 1 : 0
+                    if (questoes[i].sinal == '+') {
+                        acertos += questoes[i].resp == questoes[i].valor1 + questoes[i].valor2 ? 1 : 0
+                    } else if (questoes[i].sinal == '-') {
+                        acertos += questoes[i].resp == questoes[i].valor1 - questoes[i].valor2 ? 1 : 0
+                    } else {
+                        acertos += questoes[i].resp == questoes[i].valor1 * questoes[i].valor2 ? 1 : 0
+                    }
                 }
                 document.querySelector('#resp').setAttribute('hidden','true')
                 document.querySelector('#pronto').innerHTML = 'Mostrar respostas'
                 document.querySelector('#questaoNumber').innerHTML = `Resultado`
                 document.querySelector('#calculo').innerHTML = `Você acertou ${acertos}/${questoes.length}`
             }
-    
         }
     })
 } else {
@@ -99,14 +111,20 @@ if (mode != 'endless') {
 
             value2 = Math.random() * 100
         }
+
+        sinal = Math.random() * 100
+        console.log(sinal)
+        if (sinal < 33) { sinal = 'x' } else if (sinal < 66) { sinal = '-' } else { sinal = '+' }
+
         document.querySelector('#resp').removeAttribute('hidden')
         document.querySelector('#questaoNumber').innerHTML = `Questão ${questao}`
-        document.querySelector('#calculo').innerHTML = `${Math.round(value1)} + ${Math.round(value2)}`
+        document.querySelector('#calculo').innerHTML = `${Math.round(value1)} ${sinal} ${Math.round(value2)}`
     
         let result = {
 
             questaoNumber: questao,
             resp: document.querySelector('#resp').value,
+            sinal: sinal,
             valor1: Math.round(value1),
             valor2: Math.round(value2)
         }
@@ -120,6 +138,7 @@ if (mode != 'endless') {
             }
         }
         document.querySelector('#resp').value = ''
+        console.log(sinal)
     })
 }
 
@@ -132,7 +151,12 @@ function end() {
 
     for (let i = 0; i < questoes.length; i++) {
 
-        acertos += questoes[i].resp == questoes[i].valor1 + questoes[i].valor2 ? 1 : 0
+        if (questoes[i].sinal == '+') 
+            acertos += questoes[i].resp == questoes[i].valor1 + questoes[i].valor2 ? 1 : 0
+        else if (questoes[i].sinal == '-')
+            acertos += questoes[i].resp == questoes[i].valor1 - questoes[i].valor2 ? 1 : 0
+        else
+            acertos += questoes[i].resp == questoes[i].valor1 * questoes[i].valor2 ? 1 : 0
     }
     document.querySelector('#term').setAttribute('hidden','true')
     document.querySelector('#resp').setAttribute('hidden','true')
@@ -168,16 +192,40 @@ function printResult() {
         calculo.classList.add('text-white','m-3','p-2')
         resultado.classList.add('text-white','m-3','p-2')
 
-        if (questoes[i].valor1 + questoes[i].valor2 == questoes[i].resp) {
-            calculo.classList.add('bg-success')
-            resultado.classList.add('bg-success')
+        if (questoes[i].sinal == '+') {
+            if (questoes[i].valor1 + questoes[i].valor2 == questoes[i].resp) {
+                calculo.classList.add('bg-success')
+                resultado.classList.add('bg-success')
+            } else {
+                calculo.classList.add('bg-danger')
+                resultado.classList.add('bg-danger')
+            }
+        } else if (questoes[i].sinal == '-') {
+            if (questoes[i].valor1 - questoes[i].valor2 == questoes[i].resp) {
+                calculo.classList.add('bg-success')
+                resultado.classList.add('bg-success')
+            } else {
+                calculo.classList.add('bg-danger')
+                resultado.classList.add('bg-danger')
+            }
         } else {
-            calculo.classList.add('bg-danger')
-            resultado.classList.add('bg-danger')
+            if (questoes[i].valor1 * questoes[i].valor2 == questoes[i].resp) {
+                calculo.classList.add('bg-success')
+                resultado.classList.add('bg-success')
+            } else {
+                calculo.classList.add('bg-danger')
+                resultado.classList.add('bg-danger')
+            }
         }
 
+        if (questoes[i].sinal == '+') {
+            calculo.innerHTML = `${questoes[i].valor1} + ${questoes[i].valor2} = ${questoes[i].valor1 + questoes[i].valor2}`
+        } else if (questoes[i].sinal == '-') {
+            calculo.innerHTML = `${questoes[i].valor1} - ${questoes[i].valor2} = ${questoes[i].valor1 - questoes[i].valor2}`
+        } else {
+            calculo.innerHTML = `${questoes[i].valor1} x ${questoes[i].valor2} = ${questoes[i].valor1 * questoes[i].valor2}`
+        }
         questao.innerHTML = `Questão ${questoes[i].questaoNumber}`
-        calculo.innerHTML = `${questoes[i].valor1} + ${questoes[i].valor2} = ${questoes[i].valor1 + questoes[i].valor2}`
         resultado.innerHTML = `Resposta = ${questoes[i].resp}`
 
         document.querySelector('#print').appendChild(div)
