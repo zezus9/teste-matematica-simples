@@ -5,6 +5,7 @@ var mode = urlClass.searchParams.get("mode")
 document.querySelector('#calculo').innerHTML = mode == 'endless' ? 'Modo Infinito' : 'Jogo rápido'
 
 let questao = 0
+let endTimer = false
 let value1
 let value2
 let sinal
@@ -70,11 +71,11 @@ if (mode != 'endless') {
         
                 for (let i = 0; i < questoes.length; i++) {
                     if (questoes[i].sinal == '+') {
-                        acertos += questoes[i].resp == questoes[i].valor1 + questoes[i].valor2 ? 1 : 0
+                        acertos += questoes[i].resp === questoes[i].valor1 + questoes[i].valor2 ? 1 : 0
                     } else if (questoes[i].sinal == '-') {
-                        acertos += questoes[i].resp == questoes[i].valor1 - questoes[i].valor2 ? 1 : 0
+                        acertos += questoes[i].resp === questoes[i].valor1 - questoes[i].valor2 ? 1 : 0
                     } else {
-                        acertos += questoes[i].resp == questoes[i].valor1 * questoes[i].valor2 ? 1 : 0
+                        acertos += questoes[i].resp === questoes[i].valor1 * questoes[i].valor2 ? 1 : 0
                     }
                 }
                 document.querySelector('#resp').setAttribute('hidden','true')
@@ -88,7 +89,6 @@ if (mode != 'endless') {
     document.querySelector('#pronto').addEventListener('click',function(e) {
         
         e.preventDefault()
-        
         if (questao == 1) {
             
             let btn = document.createElement("button")
@@ -113,7 +113,7 @@ if (mode != 'endless') {
         }
 
         sinal = Math.random() * 100
-        console.log(sinal)
+        
         if (sinal < 33) { sinal = 'x' } else if (sinal < 66) { sinal = '-' } else { sinal = '+' }
 
         document.querySelector('#resp').removeAttribute('hidden')
@@ -138,25 +138,24 @@ if (mode != 'endless') {
             }
         }
         document.querySelector('#resp').value = ''
-        console.log(sinal)
     })
 }
 
 function end() {
 
+    endTimer = true
     questoes[questoes.length - 1].resp = document.querySelector('#resp').value
     questoes.pop()
-    console.log(questoes)
     let acertos = 0
 
     for (let i = 0; i < questoes.length; i++) {
 
         if (questoes[i].sinal == '+') 
-            acertos += questoes[i].resp == questoes[i].valor1 + questoes[i].valor2 ? 1 : 0
+            acertos += questoes[i].resp === questoes[i].valor1 + questoes[i].valor2 ? 1 : 0
         else if (questoes[i].sinal == '-')
-            acertos += questoes[i].resp == questoes[i].valor1 - questoes[i].valor2 ? 1 : 0
+            acertos += questoes[i].resp === questoes[i].valor1 - questoes[i].valor2 ? 1 : 0
         else
-            acertos += questoes[i].resp == questoes[i].valor1 * questoes[i].valor2 ? 1 : 0
+            acertos += questoes[i].resp === questoes[i].valor1 * questoes[i].valor2 ? 1 : 0
     }
     document.querySelector('#term').setAttribute('hidden','true')
     document.querySelector('#resp').setAttribute('hidden','true')
@@ -173,6 +172,7 @@ function end() {
 
 function printResult() {
 
+    endTimer = true
     document.querySelector('#print').innerHTML = ''
     document.querySelector('#print').classList.remove('d-flex')
     document.querySelector('#main').classList.remove('border','d-flex')
@@ -193,7 +193,7 @@ function printResult() {
         resultado.classList.add('text-white','m-3','p-2')
 
         if (questoes[i].sinal == '+') {
-            if (questoes[i].valor1 + questoes[i].valor2 == questoes[i].resp) {
+            if (questoes[i].valor1 + questoes[i].valor2 === questoes[i].resp) {
                 calculo.classList.add('bg-success')
                 resultado.classList.add('bg-success')
             } else {
@@ -201,7 +201,7 @@ function printResult() {
                 resultado.classList.add('bg-danger')
             }
         } else if (questoes[i].sinal == '-') {
-            if (questoes[i].valor1 - questoes[i].valor2 == questoes[i].resp) {
+            if (questoes[i].valor1 - questoes[i].valor2 === questoes[i].resp) {
                 calculo.classList.add('bg-success')
                 resultado.classList.add('bg-success')
             } else {
@@ -209,7 +209,7 @@ function printResult() {
                 resultado.classList.add('bg-danger')
             }
         } else {
-            if (questoes[i].valor1 * questoes[i].valor2 == questoes[i].resp) {
+            if (questoes[i].valor1 * questoes[i].valor2 === questoes[i].resp) {
                 calculo.classList.add('bg-success')
                 resultado.classList.add('bg-success')
             } else {
@@ -234,5 +234,23 @@ function printResult() {
         div2.appendChild(calculo)
         div2.appendChild(resultado)
     }
+}
 
+function começarTimer(inicial, display) {
+    var timer = inicial, minutos, segundos
+    setInterval(function () {
+        minutos = parseInt(timer / 60, 10)
+        segundos = parseInt(timer % 60, 10)
+        minutos = minutos < 10 ? "0" + minutos : minutos
+        segundos = segundos < 10 ? "0" + segundos : segundos
+        display.textContent = minutos + ":" + segundos
+        console.log(endTimer)
+        if (!endTimer) {
+            timer++
+        }
+    }, 1000)
+}
+window.onload = function () {
+    var inicial = 0
+    começarTimer(inicial, document.querySelector('#timer'))
 }
