@@ -34,7 +34,7 @@ if (mode != 'endless') {
             }
             
             sinal = Math.random() * 100
-            if (sinal < 33) { sinal = 'x' } else if (sinal < 66) { sinal = 'x' } else { sinal = '+' }
+            if (sinal < 33) { sinal = 'x' } else if (sinal < 66) { sinal = '-' } else { sinal = '+' }
 
             document.querySelector('#resp').removeAttribute('hidden')
             document.querySelector('#questaoNumber').innerHTML = `Questão ${questao}`
@@ -68,14 +68,14 @@ if (mode != 'endless') {
                 questao += 1
                 let acertos = 0
                 questoes[questoes.length - 1].resp = document.querySelector('#resp').value
-        
+                
                 for (let i = 0; i < questoes.length; i++) {
                     if (questoes[i].sinal == '+') {
-                        acertos += questoes[i].resp === questoes[i].valor1 + questoes[i].valor2 ? 1 : 0
+                        acertos += questoes[i].resp == questoes[i].valor1 + questoes[i].valor2 ? 1 : 0
                     } else if (questoes[i].sinal == '-') {
-                        acertos += questoes[i].resp === questoes[i].valor1 - questoes[i].valor2 ? 1 : 0
+                        acertos += questoes[i].resp == questoes[i].valor1 - questoes[i].valor2 ? 1 : 0
                     } else {
-                        acertos += questoes[i].resp === questoes[i].valor1 * questoes[i].valor2 ? 1 : 0
+                        acertos += questoes[i].resp == questoes[i].valor1 * questoes[i].valor2 ? 1 : 0
                     }
                 }
                 document.querySelector('#resp').setAttribute('hidden','true')
@@ -151,11 +151,11 @@ function end() {
     for (let i = 0; i < questoes.length; i++) {
 
         if (questoes[i].sinal == '+') 
-            acertos += questoes[i].resp === questoes[i].valor1 + questoes[i].valor2 ? 1 : 0
+            acertos += questoes[i].resp == questoes[i].valor1 + questoes[i].valor2 ? 1 : 0
         else if (questoes[i].sinal == '-')
-            acertos += questoes[i].resp === questoes[i].valor1 - questoes[i].valor2 ? 1 : 0
+            acertos += questoes[i].resp == questoes[i].valor1 - questoes[i].valor2 ? 1 : 0
         else
-            acertos += questoes[i].resp === questoes[i].valor1 * questoes[i].valor2 ? 1 : 0
+            acertos += questoes[i].resp == questoes[i].valor1 * questoes[i].valor2 ? 1 : 0
     }
     document.querySelector('#term').setAttribute('hidden','true')
     document.querySelector('#resp').setAttribute('hidden','true')
@@ -193,7 +193,7 @@ function printResult() {
         resultado.classList.add('text-white','m-3','p-2')
 
         if (questoes[i].sinal == '+') {
-            if (questoes[i].valor1 + questoes[i].valor2 === questoes[i].resp) {
+            if (questoes[i].valor1 + questoes[i].valor2 == questoes[i].resp) {
                 calculo.classList.add('bg-success')
                 resultado.classList.add('bg-success')
             } else {
@@ -201,7 +201,7 @@ function printResult() {
                 resultado.classList.add('bg-danger')
             }
         } else if (questoes[i].sinal == '-') {
-            if (questoes[i].valor1 - questoes[i].valor2 === questoes[i].resp) {
+            if (questoes[i].valor1 - questoes[i].valor2 == questoes[i].resp) {
                 calculo.classList.add('bg-success')
                 resultado.classList.add('bg-success')
             } else {
@@ -209,7 +209,7 @@ function printResult() {
                 resultado.classList.add('bg-danger')
             }
         } else {
-            if (questoes[i].valor1 * questoes[i].valor2 === questoes[i].resp) {
+            if (questoes[i].valor1 * questoes[i].valor2 == questoes[i].resp) {
                 calculo.classList.add('bg-success')
                 resultado.classList.add('bg-success')
             } else {
@@ -244,7 +244,6 @@ function começarTimer(inicial, display) {
         minutos = minutos < 10 ? "0" + minutos : minutos
         segundos = segundos < 10 ? "0" + segundos : segundos
         display.textContent = minutos + ":" + segundos
-        console.log(endTimer)
         if (!endTimer) {
             timer++
         }
